@@ -1,0 +1,82 @@
+---
+# tasks file for ansible-pitft
+
+- name: "[pitft] Create user pi with login shell bash and add it to sudo group"
+  user:
+    name: pi
+    password: "{{ pitft_pi_passwd }}"
+    groups: sudo
+    append: yes
+    shell: /bin/bash
+  become: yes
+  tags:
+    - pitft
+
+- name: "[pitft] Make sure /etc/rc.local exists"
+  file:
+    path: /etc/rc.local
+    owner: root
+    group: root
+    mode: 0644
+    state: touch
+  become: yes
+  tags:
+    - pitft
+
+- name: "[pitft] Create softlink for autologin"
+  file:
+    src: /etc/systemd/system/autologin@.service
+    dest: /etc/systemd/system/getty.target.wants/getty@tty1.service
+    state: link
+  become: yes
+  tags:
+    - pitft
+
+# PITFT
+- name: "[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers"
+  get_url:
+    url: https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/adafruit-pitft.sh
+    dest: /tmp/adafruit-pitft.sh
+    mode: 0755
+  become: yes
+  tags:
+    - pitft
+
+- name: "[pitft] Run adafruit-pitft.sh installer without reboot"
+  shell: >
+    echo -e "\n{{pitft_display_model}}\n{{pitft_display_rotation}}\n{{pitft_console}}\nN" | sudo bash /tmp/adafruit-pitft.sh
+  become: yes
+  tags:
+    - pitft
+
+# This should go after pitft install,
+# because the installer sets the autologin user to be an <ansible_user id>
+- name: "[pitft] Specify user 'pi' for autologin"
+  replace:
+    path: /etc/systemd/system/getty.target.wants/getty@tty1.service
+    regexp: 'ExecStart=-\/sbin\/agetty --autologin (.*) --noclear \%I \$TERM'
+    replace: 'ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM'
+  become: yes
+  tags:
+    - pitft
+
+# REBOOT
+- name: '[pitft] Reboot the managed host to reload kernel modules'
+  shell: 'sleep 1 && shutdown -r now "Reboot triggered by Ansible" && sleep 1'
+  async: 1
+  poll: 0
+  become: yes
+  tags:
+    - pitft
+
+# ansible_ssh_host variable is set in ansible inventory (hosts) file
+- name: '[pitft] Waiting for managed host to come back after reboot'
+  local_action:
+    module: wait_for
+      host="{{ ansible_ssh_host }}"
+      port=22
+      delay=1
+  become: no
+  tags:
+    - pitft
+...
