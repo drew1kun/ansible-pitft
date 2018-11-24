@@ -32,7 +32,6 @@ Role Variables
 | **pitft_display_rotation** | Display rotation 90,180,270,0 degrees; see [`defaults/main.yml`](defaults/main.yml)| `3` |
 | **pitft_console** | Would you like the console to appear on the PiTFT display? Y/n | `Y` |
 
-
 Dependencies
 ------------
 
@@ -48,7 +47,9 @@ Example Playbook
   - role: drew-kun.pitft
     pitft_display_rotation: 1
     pitft_pi_passwd: "{{ vault_pitft_pi_passwd }}"
+
 ```
+
 License
 -------
 
