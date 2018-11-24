@@ -12,17 +12,6 @@
   tags:
     - pitft
 
-- name: "[pitft] Create .bash_profile to run pihole chronometer script on pi user autologin"
-  copy:
-    src: bash_profile
-    dest: /home/pi/.bash_profile
-    owner: pi
-    group: pi
-    mode: 0644
-  become: yes
-  tags:
-    - pitft
-
 - name: "[pitft] Make sure /etc/rc.local exists"
   file:
     path: /etc/rc.local

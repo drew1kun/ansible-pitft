@@ -21,10 +21,9 @@
 # See https://ansible-docs.readthedocs.io/zh/stable-2.0/rst/playbooks_filters.html
 #
 # SHA512 salted password hash for pi user, to be used for autologin (P@$$w0rd)
+# NOTE: this unsecure password must be overridden when revoking this role in your playbook
 pitft_pi_passwd:
    $6$LM55QAj0WKNtA58y$LwoFqpktx9GfaZSfRI6Oo3ix4b/gc/mLtAbjh9UTH70ZAXy5P1LSlx3x3oiIeeWtdgEI8CxhlC.IQP9TNt3dr0
-
-pitft_chronometer: no  # Create .bash_profile with 'pihole -c' command for running chronometer on login
 
 # Select display model to be configured:
 # 1 - PiTFT 2.4", 2.8" or 3.2" resistive (240x320)
