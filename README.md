@@ -1,38 +1,66 @@
-Role Name
+Ansible role: pitft
 =========
 
-A brief description of the role goes here.
+[![MIT licensed][mit-badge]][mit-link]
+[![Galaxy Role][role-badge]][galaxy-link]
+
+Ansible role which installs and configures the drivers for one of Adafruit tft Displays:
+ - PiTFT 2.4", 2.8" or 3.2" resistive (240x320)
+ - PiTFT 2.2" no touch (240x320)
+ - PiTFT 2.8" capacitive touch (240x320)
+ - PiTFT 3.5" resistive touch (320x480)
+
+The one I use is [Adafruit 28" tft Capacitive display][pitft-adafruit-link]
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+NOTE: Role requires Fact Gathering by ansible!
+
+One of the following distros (or derivatives) required:
+ - Debian | Raspbian | [Minibian][minibian-link]
+    - jessie
+    - stretch
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+| Variable | Description | Default |
+|----------|-------------|---------|
+| **pitft_pi_passwd** | SHA512 salted hash for for pi user's password to be set up | see [`defaults/main.yml`](defaults/main.yml) |
+| **pitft_display_model** | PiTFT display model (2.4", 2.2", 2.8", 3.5"); see [`defaults/main.yml`](defaults/main.yml)| `3` |
+| **pitft_display_rotation** | Display rotation 90,180,270,0 degrees; see [`defaults/main.yml`](defaults/main.yml)| `3` |
+| **pitft_console** | Would you like the console to appear on the PiTFT display? Y/n | `Y` |
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
+```yaml
+- hosts: raspberrypi
+  gather_facts: yes
+  roles:
+  - role: drew-kun.pitft
+    pitft_display_rotation: 1
+    pitft_pi_passwd: "{{ vault_pitft_pi_passwd }}"
+```
 License
 -------
 
-BSD
+[MIT][mit-link]
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
+
+[role-badge]: https://img.shields.io/badge/role-drew--kun.pitft-green.svg
+[galaxy-link]: https://galaxy.ansible.com/drew-kun/pitft/
+[mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-pihole/master/LICENSE
+[minibian-link]: https://minibianpi.wordpress.com/
