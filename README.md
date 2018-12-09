@@ -27,9 +27,9 @@ Role Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| **pitft_pi_passwd** | SHA512 salted hash for for pi user's password to be set up | see [`defaults/main.yml`](defaults/main.yml) |
-| **pitft_display_model** | PiTFT display model (2.4", 2.2", 2.8", 3.5"); see [`defaults/main.yml`](defaults/main.yml)| `3` |
-| **pitft_display_rotation** | Display rotation 90,180,270,0 degrees; see [`defaults/main.yml`](defaults/main.yml)| `3` |
+| **pitft_pi_passwd** | SHA512 salted hash for for pi user's password to be set up | see [`defaults/main.yml`](defaults/main.yml#L25) |
+| **pitft_display_model** | PiTFT display model (2.4", 2.2", 2.8", 3.5"); see [`defaults/main.yml`](defaults/main.yml#L33)| `3` |
+| **pitft_display_rotation** | Display rotation 90,180,270,0 degrees; see [`defaults/main.yml`](defaults/main.yml#L40)| `3` |
 | **pitft_console** | Would you like the console to appear on the PiTFT display? Y/n | `Y` |
 
 Dependencies
