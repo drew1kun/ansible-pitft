@@ -1,7 +1,7 @@
 ---
 # tasks file for ansible-pitft
 
-- name: "[pitft] Create user pi with login shell bash and add it to sudo group"
+- name: '[pitft] Create user pi with login shell bash and add it to sudo group'
   user:
     name: pi
     password: "{{ pitft_pi_passwd }}"
@@ -12,7 +12,7 @@
   tags:
     - pitft
 
-- name: "[pitft] Create .bash_profile to run pihole chronometer script on pi user autologin"
+- name: '[pitft] Create .bash_profile to run pihole chronometer script on pi user autologin'
   template:
     src: bash_profile.j2
     dest: /home/pi/.bash_profile
@@ -24,7 +24,7 @@
   tags:
     - pitft
 
-- name: "[pitft] Make sure /etc/rc.local exists"
+- name: '[pitft] Make sure /etc/rc.local exists'
   file:
     path: /etc/rc.local
     owner: root
@@ -35,7 +35,7 @@
   tags:
     - pitft
 
-- name: "[pitft] Create softlink for autologin"
+- name: '[pitft] Create softlink for autologin'
   file:
     src: /etc/systemd/system/autologin@.service
     dest: /etc/systemd/system/getty.target.wants/getty@tty1.service
@@ -45,7 +45,7 @@
     - pitft
 
 # PITFT
-- name: "[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers"
+- name: '[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
   get_url:
     url: https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/adafruit-pitft.sh
     dest: /tmp/adafruit-pitft.sh
@@ -54,7 +54,7 @@
   tags:
     - pitft
 
-- name: "[pitft] Run adafruit-pitft.sh installer without reboot"
+- name: '[pitft] Run adafruit-pitft.sh installer without reboot'
   shell: >
     echo -e "\n{{pitft_display_model}}\n{{pitft_display_rotation}}\n{{pitft_console}}\nN" | sudo bash /tmp/adafruit-pitft.sh
   become: yes
@@ -63,7 +63,7 @@
 
 # This should go after pitft install,
 # because the installer sets the autologin user to be an <ansible_user id>
-- name: "[pitft] Specify user 'pi' for autologin"
+- name: '[pitft] Specify user 'pi' for autologin'
   replace:
     path: /etc/systemd/system/getty.target.wants/getty@tty1.service
     regexp: 'ExecStart=-\/sbin\/agetty --autologin (.*) --noclear \%I \$TERM'
