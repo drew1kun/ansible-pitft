@@ -10,7 +10,7 @@
     shell: /bin/bash
   become: yes
   tags:
-    - pitft
+  - pitft
 
 - name: '[pitft] Create .bash_profile to run pihole chronometer script on pi user autologin'
   template:
@@ -22,7 +22,7 @@
   when: pitft_chronometer
   become: yes
   tags:
-    - pitft
+  - pitft
 
 - name: '[pitft] Make sure /etc/rc.local exists'
   file:
@@ -33,7 +33,7 @@
     state: touch
   become: yes
   tags:
-    - pitft
+  - pitft
 
 - name: '[pitft] Create softlink for autologin'
   file:
@@ -42,7 +42,7 @@
     state: link
   become: yes
   tags:
-    - pitft
+  - pitft
 
 # PITFT
 - name: '[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
@@ -52,25 +52,25 @@
     mode: 0755
   become: yes
   tags:
-    - pitft
+  - pitft
 
 - name: '[pitft] Run adafruit-pitft.sh installer without reboot'
   shell: >
     echo -e "\n{{pitft_display_model}}\n{{pitft_display_rotation}}\n{{pitft_console}}\nN" | sudo bash /tmp/adafruit-pitft.sh
   become: yes
   tags:
-    - pitft
+  - pitft
 
 # This should go after pitft install,
 # because the installer sets the autologin user to be an <ansible_user id>
-- name: '[pitft] Specify user 'pi' for autologin'
+- name: '[pitft] Specify user "pi" for autologin'
   replace:
     path: /etc/systemd/system/getty.target.wants/getty@tty1.service
-    regexp: 'ExecStart=-\/sbin\/agetty --autologin (.*) --noclear \%I \$TERM'
+    regexp: 'ExecStart=(.*)'
     replace: 'ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM'
   become: yes
   tags:
-    - pitft
+  - pitft
 
 # REBOOT
 - name: '[pitft] Reboot the managed host to reload kernel modules'
@@ -79,7 +79,7 @@
   poll: 0
   become: yes
   tags:
-    - pitft
+  - pitft
 
 # ansible_ssh_host variable is set in ansible inventory (hosts) file
 - name: '[pitft] Waiting for managed host to come back after reboot'
@@ -90,5 +90,5 @@
       delay=1
   become: no
   tags:
-    - pitft
+  - pitft
 ...
