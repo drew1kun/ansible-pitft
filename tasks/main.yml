@@ -45,18 +45,31 @@
   - pitft
 
 # PITFT
+# This nice installation way does not always work, because the dnscrypt enabled resolvers not always
+# able to resolve 'raw.githubusercontent.com' host.
+# Therefore using git module instead of get_url;
+#
+#- name: '[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
+#  get_url:
+#    url: https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/adafruit-pitft.sh
+#    dest: /tmp/adafruit-pitft.sh
+#    mode: 0755
+#  #become: yes
+#  tags:
+#  - pitft
+#
 - name: '[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
-  get_url:
-    url: https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/adafruit-pitft.sh
-    dest: /tmp/adafruit-pitft.sh
-    mode: 0755
-  become: yes
+  git:
+    repo: https://github.com/adafruit/Raspberry-Pi-Installer-Scripts.git
+    depth: 1
+    dest: /tmp/af
+    version: master
   tags:
   - pitft
 
 - name: '[pitft] Run adafruit-pitft.sh installer without reboot'
   shell: >
-    echo -e "\n{{pitft_display_model}}\n{{pitft_display_rotation}}\n{{pitft_console}}\nN" | sudo bash /tmp/adafruit-pitft.sh
+    echo -e "\n{{pitft_display_model}}\n{{pitft_display_rotation}}\n{{pitft_console}}\nN" | sudo bash /tmp/af/adafruit-pitft.sh
   become: yes
   tags:
   - pitft
