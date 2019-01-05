@@ -69,7 +69,8 @@
 
 - name: '[pitft] Run adafruit-pitft.sh installer without reboot'
   shell: >
-    echo -e "\n{{pitft_display_model}}\n{{pitft_display_rotation}}\n{{pitft_console}}\nN" | sudo bash /tmp/af/adafruit-pitft.sh
+    echo -e "\n{{ pitft_display_model }}\n{{ pitft_display_rotation }}\n{{ pitft_console }}\nN" | \
+    sudo bash /tmp/af/adafruit-pitft.sh
   become: yes
   tags:
   - pitft
@@ -96,12 +97,12 @@
 
 # ansible_ssh_host variable is set in ansible inventory (hosts) file
 - name: '[pitft] Waiting for managed host to come back after reboot'
-  local_action:
-    module: wait_for
-      host="{{ ansible_ssh_host }}"
-      port=22
-      delay=1
+  wait_for:
+    host: "{{ ansible_ssh_host }}"
+    port: 22
+    delay: 1
   become: no
+  delegate_to: localhost
   tags:
   - pitft
 ...
