@@ -9,8 +9,7 @@
     append: yes
     shell: /bin/bash
   become: yes
-  tags:
-  - pitft
+  tags: pitft
 
 - name: '[pitft] Create .bash_profile to run pihole chronometer script on pi user autologin'
   template:
@@ -21,8 +20,11 @@
     mode: 0644
   when: pitft_chronometer
   become: yes
-  tags:
-  - pitft
+  tags: pitft
+
+- name: '[pitft] Check if the /etc/rc.local file exists'
+  stat: path=/etc/rc.local
+  register: pitft_rc_local
 
 - name: '[pitft] Make sure /etc/rc.local exists'
   file:
@@ -32,8 +34,8 @@
     mode: 0644
     state: touch
   become: yes
-  tags:
-  - pitft
+  when: not pitft_rc_local.stat.exists
+  tags: pitft
 
 - name: '[pitft] Create softlink for autologin'
   file:
@@ -41,8 +43,7 @@
     dest: /etc/systemd/system/getty.target.wants/getty@tty1.service
     state: link
   become: yes
-  tags:
-  - pitft
+  tags: pitft
 
 # PITFT
 # This nice installation way does not always work, because the dnscrypt enabled resolvers not always
@@ -55,8 +56,7 @@
 #    dest: /tmp/adafruit-pitft.sh
 #    mode: 0755
 #  #become: yes
-#  tags:
-#  - pitft
+#  tags: pitft
 #
 - name: '[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
   git:
@@ -64,16 +64,14 @@
     depth: 1
     dest: /tmp/af
     version: master
-  tags:
-  - pitft
+  tags: pitft
 
 - name: '[pitft] Run adafruit-pitft.sh installer without reboot'
   shell: >
     echo -e "\n{{ pitft_display_model }}\n{{ pitft_display_rotation }}\n{{ pitft_console }}\nN" | \
     sudo bash /tmp/af/adafruit-pitft.sh
   become: yes
-  tags:
-  - pitft
+  tags: pitft
 
 # This should go after pitft install,
 # because the installer sets the autologin user to be an <ansible_user id>
@@ -83,8 +81,7 @@
     regexp: 'ExecStart=(.*)'
     replace: 'ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM'
   become: yes
-  tags:
-  - pitft
+  tags: pitft
 
 # REBOOT
 - name: '[pitft] Reboot the managed host to reload kernel modules'
@@ -92,8 +89,7 @@
   async: 1
   poll: 0
   become: yes
-  tags:
-  - pitft
+  tags: pitft
 
 # ansible_ssh_host variable is set in ansible inventory (hosts) file
 - name: '[pitft] Waiting for managed host to come back after reboot'
@@ -103,6 +99,5 @@
     delay: 1
   become: no
   delegate_to: localhost
-  tags:
-  - pitft
+  tags: pitft
 ...
