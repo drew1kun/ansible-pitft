@@ -10,7 +10,7 @@ Ansible role which installs and configures the drivers for one of Adafruit tft D
  - PiTFT 2.8" capacitive touch (240x320)
  - PiTFT 3.5" resistive touch (320x480)
 
-The one I use is [Adafruit 28" tft Capacitive display][pitft-adafruit-link]
+The one I use is [Adafruit 28" tft Capacitive display](pitft-adafruit-link)
 
 Requirements
 ------------
