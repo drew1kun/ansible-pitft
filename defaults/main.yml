@@ -42,4 +42,3 @@ pitft_display_rotation: 3 # 270 degrees (landscape)
 
 # Would you like the console to appear on the PiTFT display? [y/n]
 pitft_console: Y
-...

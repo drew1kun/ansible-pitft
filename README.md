@@ -44,7 +44,7 @@ Example Playbook
 - hosts: raspberrypi
   gather_facts: yes
   roles:
-  - role: drew-kun.pitft
+  - role: drew1kun.pitft
     pitft_display_rotation: 1
     pitft_pi_passwd: "{{ vault_pitft_pi_passwd }}"
 
@@ -61,7 +61,7 @@ Author Information
 Andrew Shagayev | [e-mail](mailto:drewshg@gmail.com)
 
 [role-badge]: https://img.shields.io/badge/role-drew--kun.pitft-green.svg
-[galaxy-link]: https://galaxy.ansible.com/drew-kun/pitft/
+[galaxy-link]: https://galaxy.ansible.com/drew1kun/pitft/
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[mit-link]: https://raw.githubusercontent.com/drew-kun/ansible-pihole/master/LICENSE
+[mit-link]: https://raw.githubusercontent.com/drew1kun/ansible-pihole/master/LICENSE
 [minibian-link]: https://minibianpi.wordpress.com/
