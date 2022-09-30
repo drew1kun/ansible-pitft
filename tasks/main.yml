@@ -1,32 +1,32 @@
 ---
-# tasks file for ansible-pitft
+# tasks file for ansible-rpi_pitft
 
-- name: '[pitft] Create user pi with login shell bash and add it to sudo group'
+- name: '[rpi_pitft] Create user pi with login shell bash and add it to sudo group'
   user:
     name: pi
-    password: "{{ pitft_pi_passwd }}"
+    password: "{{ rpi_pitft_pi_passwd }}"
     groups: sudo
     append: yes
     shell: /bin/bash
   become: yes
-  tags: pitft
+  tags: rpi_pitft
 
-- name: '[pitft] Create .bash_profile to run pihole chronometer script on pi user autologin'
+- name: '[rpi_pitft] Create .bash_profile to run pihole chronometer script on pi user autologin'
   template:
     src: bash_profile.j2
     dest: /home/pi/.bash_profile
     owner: pi
     group: pi
     mode: 0644
-  when: pitft_chronometer
+  when: rpi_pitft_chronometer
   become: yes
-  tags: pitft
+  tags: rpi_pitft
 
-- name: '[pitft] Check if the /etc/rc.local file exists'
+- name: '[rpi_pitft] Check if the /etc/rc.local file exists'
   stat: path=/etc/rc.local
-  register: pitft_rc_local
+  register: rpi_pitft_rc_local
 
-- name: '[pitft] Make sure /etc/rc.local exists'
+- name: '[rpi_pitft] Make sure /etc/rc.local exists'
   file:
     path: /etc/rc.local
     owner: root
@@ -34,68 +34,68 @@
     mode: 0644
     state: touch
   become: yes
-  when: not pitft_rc_local.stat.exists
-  tags: pitft
+  when: not rpi_pitft_rc_local.stat.exists
+  tags: rpi_pitft
 
-- name: '[pitft] Create softlink for autologin'
+- name: '[rpi_pitft] Create softlink for autologin'
   file:
     src: /etc/systemd/system/autologin@.service
     dest: /etc/systemd/system/getty.target.wants/getty@tty1.service
     state: link
   become: yes
-  tags: pitft
+  tags: rpi_pitft
 
 # PITFT
-- name: '[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
+- name: '[rpi_pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
   get_url:
-    url: https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/adafruit-pitft.sh
-    dest: /tmp/adafruit-pitft.sh
+    url: https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/adafruit-rpi_pitft.sh
+    dest: /tmp/adafruit-rpi_pitft.sh
     mode: 0755
-  tags: pitft
+  tags: rpi_pitft
 
 # This nice installation way does not always work, because the dnscrypt enabled resolvers not always
 # able to resolve 'raw.githubusercontent.com' host.
 # Therefore using git module instead of get_url;
-#- name: '[pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
+#- name: '[rpi_pitft] Download Adafruit Raspberry-Pi-Installer-Script for installing tft display drivers'
 #  git:
 #    repo: https://github.com/adafruit/Raspberry-Pi-Installer-Scripts.git
 #    depth: 1
 #    dest: /tmp/af
 #    version: master
-#  tags: pitft
+#  tags: rpi_pitft
 
-- name: '[pitft] Run adafruit-pitft.sh installer without reboot'
+- name: '[rpi_pitft] Run adafruit-rpi_pitft.sh installer without reboot'
   shell: >
-    echo -e "\n{{ pitft_display_model }}\n{{ pitft_display_rotation }}\n{{ pitft_console }}\nN" | \
-    sudo bash /tmp/adafruit-pitft.sh
-    #sudo bash /tmp/af/adafruit-pitft.sh
+    echo -e "\n{{ rpi_pitft_display_model }}\n{{ rpi_pitft_display_rotation }}\n{{ rpi_pitft_console }}\nN" | \
+    sudo bash /tmp/adafruit-rpi_pitft.sh
+    #sudo bash /tmp/af/adafruit-rpi_pitft.sh
   become: yes
-  tags: pitft
+  tags: rpi_pitft
 
-# This should go after pitft install,
+# This should go after rpi_pitft install,
 # because the installer sets the autologin user to be an <ansible_user id>
-- name: '[pitft] Specify user "pi" for autologin'
+- name: '[rpi_pitft] Specify user "pi" for autologin'
   replace:
     path: /etc/systemd/system/getty.target.wants/getty@tty1.service
     regexp: 'ExecStart=(.*)'
     replace: 'ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM'
   become: yes
-  tags: pitft
+  tags: rpi_pitft
 
 # REBOOT
-- name: '[pitft] Reboot the managed host to reload kernel modules'
+- name: '[rpi_pitft] Reboot the managed host to reload kernel modules'
   shell: 'sleep 1 && shutdown -r now "Reboot triggered by Ansible" && sleep 1'
   async: 1
   poll: 0
   become: yes
-  tags: pitft
+  tags: rpi_pitft
 
 # ansible_ssh_host variable is set in ansible inventory (hosts) file
-- name: '[pitft] Waiting for managed host to come back after reboot'
+- name: '[rpi_pitft] Waiting for managed host to come back after reboot'
   wait_for:
     host: "{{ ansible_ssh_host }}"
     port: 22
     delay: 1
   become: no
   delegate_to: localhost
-  tags: pitft
+  tags: rpi_pitft

@@ -1,5 +1,5 @@
 ---
-# defaults file for ansible-pitft
+# defaults file for ansible-rpi_pitft
 
 # ATTENTION!
 # Following instructions for some reason does not work on Mac
@@ -21,24 +21,24 @@
 # See https://ansible-docs.readthedocs.io/zh/stable-2.0/rst/playbooks_filters.html
 #
 # SHA512 salted password hash for pi user, to be used for autologin (P@$$w0rd)
-pitft_pi_passwd:
+rpi_pitft_pi_passwd:
    $6$LM55QAj0WKNtA58y$LwoFqpktx9GfaZSfRI6Oo3ix4b/gc/mLtAbjh9UTH70ZAXy5P1LSlx3x3oiIeeWtdgEI8CxhlC.IQP9TNt3dr0
 
-pitft_chronometer: no  # Create .bash_profile with 'pihole -c' command for running chronometer on login
+rpi_pitft_chronometer: no  # Create .bash_profile with 'pihole -c' command for running chronometer on login
 
 # Select display model to be configured:
 # 1 - PiTFT 2.4", 2.8" or 3.2" resistive (240x320)
 # 2 - PiTFT 2.2" no touch (240x320)
 # 3 - PiTFT 2.8" capacitive touch (240x320)
 # 4 - PiTFT 3.5" resistive touch (320x480)
-pitft_display_model: 3  # PiTFT 2.8" capacitive touch (240x320)
+rpi_pitft_display_model: 3  # PiTFT 2.8" capacitive touch (240x320)
 
 #Select rotation:
 # 1 - 90 degrees (landscape)
 # 2 - 180 degrees (portait)
 # 3 - 270 degrees (landscape)
 # 4 - 0 degrees (portait)
-pitft_display_rotation: 3 # 270 degrees (landscape)
+rpi_pitft_display_rotation: 3 # 270 degrees (landscape)
 
 # Would you like the console to appear on the PiTFT display? [y/n]
-pitft_console: Y
+rpi_pitft_console: Y

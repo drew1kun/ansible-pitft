@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: pitft
+  role_name: rpi_pitft
   author: Andrew Shagayev
   description: Ansible role for automated TFT Display driver installation on Raspberry Pi 3
 
@@ -14,6 +14,7 @@ galaxy_info:
     versions:
     - stretch
     - jessie
+    - buster
 
   galaxy_tags:
   - tft
@@ -23,5 +24,9 @@ galaxy_info:
   - pi
   - pihole
   - adafruit
+  - debian
+  - stretch
+  - jessie
+  - buster
 
 dependencies: []
