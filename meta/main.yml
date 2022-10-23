@@ -2,31 +2,25 @@ galaxy_info:
   role_name: rpi_pitft
   author: Andrew Shagayev
   description: Ansible role for automated TFT Display driver installation on Raspberry Pi 3.
-
   license: MIT
-
   min_ansible_version: 1.2
-
-  github_branch: master
-
+  github_branch: main
   platforms:
-  - name: Debian
-    versions:
+    - name: Debian
+      versions:
+        - stretch
+        - jessie
+        - buster
+  galaxy_tags:
+    - tft
+    - display
+    - screen
+    - raspberry
+    - pi
+    - pihole
+    - adafruit
+    - debian
     - stretch
     - jessie
     - buster
-
-  galaxy_tags:
-  - tft
-  - display
-  - screen
-  - raspberry
-  - pi
-  - pihole
-  - adafruit
-  - debian
-  - stretch
-  - jessie
-  - buster
-
 dependencies: []
